@@ -5,7 +5,7 @@ cimport numpy as np
 cimport cpqp
 
 DTYPE = np.double
-ctypedef np.double_t DTYPE_t
+ctypedef np.double_t DTYPE_t 
 
 cdef class PQP_Model:
     cdef cpqp.PQP_Model* m
@@ -16,8 +16,25 @@ cdef class PQP_Model:
     def __dealloc__(self):
         del self.m
 
-    def __init__(self, np.ndarray[DTYPE_t, ndim=2] tris):
-        pass
+    def __init__(self, np.ndarray[DTYPE_t, ndim=2] us,
+                       np.ndarray[DTYPE_t, ndim=2] vs,
+                       np.ndarray[DTYPE_t, ndim=2] ws):
+        cdef double u[3] 
+        cdef double v[3] 
+        cdef double w[3]
+        cdef int i
+        cdef int j
+        cdef int sz
+        sz = us.shape[0]
+        self.m.BeginModel(sz)
+        for i in range(sz):
+            for j in range(3):
+                u[j] = us[i][j]
+                v[j] = vs[i][j]
+                w[j] = ws[i][j]
+            self.m.AddTri(u, v, w, i)
+        self.m.EndModel()
+
 
 def colliding(R1, T1, PQP_Model m1, R2, T2, PQP_Model m2):
     cdef double r1[3][3]
@@ -35,8 +52,4 @@ def colliding(R1, T1, PQP_Model m1, R2, T2, PQP_Model m2):
         t2[i] = T2[i]
     cdef cpqp.PQP_CollideResult* res = new cpqp.PQP_CollideResult()
     cpqp.PQP_Collide(res, r1, t1, m1.m, r2, t2, m2.m, 2)
-    #return 0
-    #cdef cpqp.PQP_CollideResult* result = new cpqp.PQP_CollideResult()
-    #cdef cpqp.PQP_Model* m2 = M2.m
-    #return cpqp.PQP_Collide(result, r1, t1, m1, r2, t2, m2, 2)
-
+    return res.Colliding()

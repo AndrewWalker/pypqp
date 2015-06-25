@@ -3,9 +3,9 @@ cimport cython
 cdef extern from "PQP.h":
     cdef cppclass PQP_Model:
         PQP_Model()
-        BeginModel(int num_tris)
-        AddTri(double * p1, double* p2, double* p3, int id)
-        EndModel()
+        int BeginModel(int num_tris)
+        int AddTri(double p1[3], double p2[3], double p3[3], int idx)
+        int EndModel()
 
     cdef cppclass PQP_CollideResult:
         int Colliding()
@@ -14,6 +14,7 @@ cdef extern from "PQP.h":
                 double R1[3][3], double T1[3], PQP_Model *o1,
                 double R2[3][3], double T2[3], PQP_Model *o2,
                 int flag);
+
 #def colliding(R1, T1, PQP_Model M1, R2, T2, PQP_Model M2):
     #cdef double r1[3][3]
     #cdef double r2[3][3]
