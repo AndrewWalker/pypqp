@@ -1,16 +1,12 @@
 from setuptools import setup, Extension
 import os
 import glob
+import numpy
 from Cython.Build import cythonize
 from Cython.Distutils import build_ext
 
-def read(filename):
-    path = os.path.join(os.path.dirname(__file__), filename)
-    contents = open(path).read()
-    return contents
-
 srcs = [
-    'pypqp/pqp.pyx',
+    'pypqp/core.pyx',
     'pypqp/src/BV.cpp',
     'pypqp/src/Build.cpp',
     'pypqp/src/PQP.cpp',
@@ -18,8 +14,10 @@ srcs = [
 ]
 
 ext_modules = [
-    Extension('_pypqp', srcs,
-              include_dirs = ['pypqp/include'],
+    Extension('core', srcs,
+              include_dirs = ['pypqp', 
+                              'pypqp/include',
+                              numpy.get_include()],
               language='c++')
 ]
 
@@ -27,11 +25,12 @@ setup(
     name         = "pypqp",
     version      = "0.0.1",
     description  = "Cython wrapper of the Proximity Query Package",
-    long_description = read('README.rst'),
     author       = "Andrew Walker",
     author_email = "walker.ab@gmail.com",
     license      = "MIT",
+    packages     = [ 'pypqp' ],
     cmdclass     = { 'build_ext' : build_ext },
-    ext_modules  = ext_modules,
+    ext_package  = 'pypqp',
+    ext_modules  = ext_modules
 )
 
