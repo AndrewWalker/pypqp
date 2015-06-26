@@ -31,6 +31,20 @@ setup(
     packages     = [ 'pypqp' ],
     cmdclass     = { 'build_ext' : build_ext },
     ext_package  = 'pypqp',
-    ext_modules  = ext_modules
+    ext_modules  = ext_modules,
+    classifiers  = [
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: BSD License',
+        'License :: Free For Educational Use',
+        'License :: Free For Home Use',
+        'License :: Free for non-commercial use',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Operating System :: POSIX :: Linux',
+        'Topic :: Scientific/Engineering :: Mathematics',
+    ],
+ 
 )
 
