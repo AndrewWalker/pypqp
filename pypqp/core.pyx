@@ -37,6 +37,21 @@ cdef class PQP_Model:
 
 
 def colliding(R1, T1, PQP_Model m1, R2, T2, PQP_Model m2):
+    '''Test whether two geometries are in collision
+
+    R1 : array-like
+        3 x 3 rotation matrix
+    T1 : array-like 
+        translation vector
+    m1 : PQP_Model instance
+        geometry 1
+    R2 : array-like
+        3 x 3 rotation matrix
+    T2 : array-like 
+        translation vector
+    m2 : PQP_Model instance
+        geometry 1
+    '''
     cdef double r1[3][3]
     cdef double r2[3][3]
     cdef double t1[3]
