@@ -3,7 +3,7 @@ pypqp
 =====
 
 This code is a Cython wrapper of a very small subset of the functionality in
-the `Proximity Query Package <http://gamma.cs.unc.edu/SSV/>`.  
+the `Proximity Query Package <http://gamma.cs.unc.edu/SSV/>`_.  
 
 
 Installation
