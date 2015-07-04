@@ -52,6 +52,10 @@ def colliding(R1, T1, PQP_Model m1, R2, T2, PQP_Model m2):
     m2 : PQP_Model instance
         geometry 1
     '''
+    assert(R1.shape == (3,3))
+    assert(R2.shape == (3,3))
+    assert(T1.shape == (3,)), 'T1 incorrect shape'
+    assert(T2.shape == (3,)), 'T2 incorrect shape'
     cdef double r1[3][3]
     cdef double r2[3][3]
     cdef double t1[3]

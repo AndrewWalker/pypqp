@@ -8,6 +8,9 @@ cdef extern from "PQP.h":
         int EndModel()
 
     cdef cppclass PQP_CollideResult:
+        int NumBVTests()
+        int NumTriTests()
+        double QueryTimeSecs()
         int Colliding()
 
     cdef int PQP_Collide(PQP_CollideResult *result,
