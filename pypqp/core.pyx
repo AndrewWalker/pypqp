@@ -36,6 +36,13 @@ cdef class PQP_Model:
         self.m.EndModel()
 
 
+def shapeCheck(R1, R2, T1, T2):
+    assert(R1.shape == (3,3))
+    assert(R2.shape == (3,3))
+    assert(T1.shape == (3,))
+    assert(T2.shape == (3,))
+
+
 def colliding(R1, T1, PQP_Model m1, R2, T2, PQP_Model m2):
     '''Test whether two geometries are in collision
 
@@ -52,23 +59,50 @@ def colliding(R1, T1, PQP_Model m1, R2, T2, PQP_Model m2):
     m2 : PQP_Model instance
         geometry 1
     '''
-    assert(R1.shape == (3,3))
-    assert(R2.shape == (3,3))
-    assert(T1.shape == (3,)), 'T1 incorrect shape'
-    assert(T2.shape == (3,)), 'T2 incorrect shape'
+    shapeCheck(R1, R2, T1, T2)
     cdef double r1[3][3]
     cdef double r2[3][3]
     cdef double t1[3]
     cdef double t2[3]
     for i in range(3):
-        for j in range(3):
-            r1[i][j] = R1[i][j]
-    for i in range(3):
-        for j in range(3):
-            r2[i][j] = R2[i][j]
-    for i in range(3):
         t1[i] = T1[i]
         t2[i] = T2[i]
+        for j in range(3):
+            r1[i][j] = R1[i][j]
+            r2[i][j] = R2[i][j]
     cdef cpqp.PQP_CollideResult* res = new cpqp.PQP_CollideResult()
     cpqp.PQP_Collide(res, r1, t1, m1.m, r2, t2, m2.m, 2)
     return res.Colliding()
+
+def distance(R1, T1, PQP_Model m1, R2, T2, PQP_Model m2, double rel_err, double abs_err):
+    '''Test what the distance is between two geometries
+
+    R1 : array-like
+        3 x 3 rotation matrix
+    T1 : array-like 
+        translation vector
+    m1 : PQP_Model instance
+        geometry 1
+    R2 : array-like
+        3 x 3 rotation matrix
+    T2 : array-like 
+        translation vector
+    m2 : PQP_Model instance
+        geometry 1
+    '''
+    shapeCheck(R1, R2, T1, T2)
+    cdef double r1[3][3]
+    cdef double r2[3][3]
+    cdef double t1[3]
+    cdef double t2[3]
+    for i in range(3):
+        t1[i] = T1[i]
+        t2[i] = T2[i]
+        for j in range(3):
+            r1[i][j] = R1[i][j]
+            r2[i][j] = R2[i][j]
+    cdef cpqp.PQP_DistanceResult* res = new cpqp.PQP_DistanceResult()
+    cpqp.PQP_Distance(res, r1, t1, m1.m, r2, t2, m2.m, rel_err, abs_err, 2)
+    return res.Distance()
+
+
